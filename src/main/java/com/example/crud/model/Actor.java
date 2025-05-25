@@ -1,3 +1,17 @@
+package com.example.crud.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Set; // For many-to-many relationship
+
+/**
+ * JPA Entity for the 'actor' table.
+ * Uses Lombok annotations for boilerplate code (getters, setters, constructors).
+ */
 @Entity
 @Table(name = "actor")
 @Data // Generates getters, setters, toString, equals, and hashCode

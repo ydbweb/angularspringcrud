@@ -52,7 +52,7 @@ public class FilmActorController {
     /**
      * POST /api/film-actors : Create a new film-actor relationship.
      * Expects actorId and filmId in the request body.
-     * @param payload A map containing "actorId" and "filmId".
+     * @param payload A FilmActorRequest object containing "actorId" and "filmId".
      * @return ResponseEntity with the created FilmActor object and HTTP status CREATED,
      * or BAD_REQUEST if actor/film not found.
      */
@@ -80,17 +80,5 @@ public class FilmActorController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    /**
-     * DTO for incoming FilmActor creation requests.
-     * Using a simple class to map request body to actorId and filmId.
-     */
-    @Data // Lombok annotation for getters, setters, etc.
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FilmActorRequest {
-        private Long actorId;
-        private Long filmId;
     }
 }
