@@ -4,44 +4,35 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.Year; // For 'year' type
-import java.util.Set; // For many-to-many relationship
+import java.util.Set;
 
-/**
- * JPA Entity for the 'film' table.
- * Note: 'special_features' (SET type) is simplified to a String.
- * 'rating' (ENUM type) is simplified to a String.
- * Foreign keys `language_id` and `original_language_id` are represented as Longs.
- */
 @Entity
 @Table(name = "film")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Film {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id")
-    private Long filmId;
+    private Short filmId;
 
-    @Column(name = "title", nullable = false, length = 128)
+    @Column(name = "title", nullable = false, length = 255)
     private String title;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "release_year")
-    private Year releaseYear; // Using java.time.Year
+    private Integer releaseYear;
 
     @Column(name = "language_id", nullable = false)
-    private Long languageId; // Foreign key to language table
+    private Byte languageId;
 
     @Column(name = "original_language_id")
-    private Long originalLanguageId; // Foreign key to language table, nullable
+    private Byte originalLanguageId;
 
     @Column(name = "rental_duration", nullable = false)
     private Integer rentalDuration;
@@ -55,40 +46,45 @@ public class Film {
     @Column(name = "replacement_cost", nullable = false, precision = 5, scale = 2)
     private BigDecimal replacementCost;
 
-    @Column(name = "rating", columnDefinition = "ENUM('G','PG','PG-13','R','NC-17')")
-    private String rating; // Storing ENUM as String
-
-    @Column(name = "special_features", columnDefinition = "SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')")
-    private String specialFeatures; // Storing SET as String (e.g., "Trailers,Commentaries")
+    @Column(name = "rating", length = 10)
+    private String rating;
 
     @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
+    
+    @ManyToMany(mappedBy = "films")
+    Set<Actor> actors;
+       
 
-    // Custom constructor for creating new films without an ID
-    public Film(String title, String description, Year releaseYear, Long languageId, Long originalLanguageId,
-                Integer rentalDuration, BigDecimal rentalRate, Integer length, BigDecimal replacementCost,
-                String rating, String specialFeatures) {
-        this.title = title;
-        this.description = description;
-        this.releaseYear = releaseYear;
-        this.languageId = languageId;
-        this.originalLanguageId = originalLanguageId;
-        this.rentalDuration = rentalDuration;
-        this.rentalRate = rentalRate;
-        this.length = length;
-        this.replacementCost = replacementCost;
-        this.rating = rating;
-        this.specialFeatures = specialFeatures;
-        this.lastUpdate = LocalDateTime.now();
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        lastUpdate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        lastUpdate = LocalDateTime.now();
-    }
+    public Short getFilmId() { return filmId; }
+    public void setFilmId(Short filmId) { this.filmId = filmId; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public Integer getReleaseYear() { return releaseYear; }
+    public void setReleaseYear(Integer releaseYear) { this.releaseYear = releaseYear; }
+    public Byte getLanguageId() { return languageId; }
+    public void setLanguageId(Byte languageId) { this.languageId = languageId; }
+    public Byte getOriginalLanguageId() { return originalLanguageId; }
+    public void setOriginalLanguageId(Byte originalLanguageId) { this.originalLanguageId = originalLanguageId; }
+    public Integer getRentalDuration() { return rentalDuration; }
+    public void setRentalDuration(Integer rentalDuration) { this.rentalDuration = rentalDuration; }
+    public BigDecimal getRentalRate() { return rentalRate; }
+    public void setRentalRate(BigDecimal rentalRate) { this.rentalRate = rentalRate; }
+    public Integer getLength() { return length; }
+    public void setLength(Integer length) { this.length = length; }
+    public BigDecimal getReplacementCost() { return replacementCost; }
+    public void setReplacementCost(BigDecimal replacementCost) { this.replacementCost = replacementCost; }
+    public String getRating() { return rating; }
+    public void setRating(String rating) { this.rating = rating; }
+    public LocalDateTime getLastUpdate() { return lastUpdate; }
+    public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
+	public Set<Actor> getActors() {
+		return actors;
+	}
+	public void setActors(Set<Actor> actors) {
+		this.actors = actors;
+	}
+    
 }
