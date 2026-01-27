@@ -1,6 +1,7 @@
 package com.example.crud.controller;
 
 import com.example.crud.model.Actor;
+import com.example.crud.model.Film;
 import com.example.crud.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/actors")
+@RequestMapping("/filmactor/api/actors")
 public class ActorController {
     private final ActorService actorService;
 
@@ -19,7 +20,7 @@ public class ActorController {
         this.actorService = actorService;
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Actor>> getAllActors() {
         return new ResponseEntity<>(actorService.getAllActors(), HttpStatus.OK);
     }
@@ -30,24 +31,28 @@ public class ActorController {
                 .map(actor -> new ResponseEntity<>(actor, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    
+    @GetMapping("/actorid/{id}")
+    public ResponseEntity<List<Film>> getFilmById2(@PathVariable Integer id) {
+        return new ResponseEntity<>(actorService.getFilmsFromActor(id), HttpStatus.OK);
+    }    
+
 
     @PostMapping
     public ResponseEntity<Actor> createActor(@RequestBody Actor actor) {
         actor.setActorId(null);
-        return new ResponseEntity<>(actorService.saveActor(actor), HttpStatus.CREATED);
+        return null;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Actor> updateActor(@PathVariable Integer id, @RequestBody Actor actorDetails) {
-        return actorService.getActorById(id)
-                .map(existingActor -> {
-                    existingActor.setFirstName(actorDetails.getFirstName());
-                    existingActor.setLastName(actorDetails.getLastName());
-                    existingActor.setLastUpdate(actorDetails.getLastUpdate());
-                    return new ResponseEntity<>(actorService.saveActor(existingActor), HttpStatus.OK);
-                })
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public Actor updateActor(@PathVariable Integer id, @RequestBody Object actorDetails) {
+    	return this.actorService.updateActor(id, actorDetails);
     }
+    
+    @PutMapping("/addtoactor/{id}")
+    public Actor addUpdateToactor(@PathVariable Integer id, @RequestBody Object actorDetails) {
+    	return this.actorService.addUpdateToactorFilms(id, actorDetails);
+    }    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteActor(@PathVariable Integer id) {

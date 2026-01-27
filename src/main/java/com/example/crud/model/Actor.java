@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,12 +30,12 @@ public class Actor {
     @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
       name = "film_actor", 
       joinColumns = @JoinColumn(name = "actor_id"), 
       inverseJoinColumns = @JoinColumn(name = "film_id"))
-    Set<Film> films;
+    List<Film> films;
     
     public Short getActorId() { return actorId; }
     public void setActorId(Short actorId) { this.actorId = actorId; }
@@ -45,11 +46,21 @@ public class Actor {
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
     
-	public Set<Film> getFilms() {
+	public List<Film> getFilms() {
 		return films;
 	}
-	public void setFilms(Set<Film> films) {
+	public void setFilms(List<Film> films) {
 		this.films = films;
 	}
+	
+	public void addFilm(Film film) {
+	    this.films.add(film);
+	    film.getActors().add(this); // Sync the other side
+	}
+
+	public void removeFilm(Film film) {
+	    this.films.remove(film);
+	    film.getActors().remove(this); // Sync the other side
+	}	
     
 }

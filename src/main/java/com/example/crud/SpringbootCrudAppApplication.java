@@ -25,7 +25,7 @@ public class SpringbootCrudAppApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 // Allow all origins, methods, and headers for /api/** endpoints
-                registry.addMapping("/api/**")
+                registry.addMapping("/filmactor/api/**")
                         .allowedOrigins("http://localhost:4200") // Angular default port
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
