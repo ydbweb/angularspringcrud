@@ -8,6 +8,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 @Entity
 @Table(name = "film")
 @Data
@@ -28,11 +32,10 @@ public class Film {
     @Column(name = "release_year")
     private Integer releaseYear;
 
-    @Column(name = "language_id", nullable = false)
-    private Byte languageId;
-
-    @Column(name = "original_language_id")
-    private Byte originalLanguageId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "language_id", nullable = false)
+    @JsonUnwrapped(enabled = false) // Ensures it doesn't flatten into the parent
+    private Language language;
 
     @Column(name = "rental_duration", nullable = false)
     private Integer rentalDuration;
@@ -52,6 +55,7 @@ public class Film {
     @Column(name = "last_update", nullable = false)
     private LocalDateTime lastUpdate;
     
+    @JsonIgnore
     @ManyToMany(mappedBy = "films")
     Set<Actor> actors;
        
@@ -64,10 +68,6 @@ public class Film {
     public void setDescription(String description) { this.description = description; }
     public Integer getReleaseYear() { return releaseYear; }
     public void setReleaseYear(Integer releaseYear) { this.releaseYear = releaseYear; }
-    public Byte getLanguageId() { return languageId; }
-    public void setLanguageId(Byte languageId) { this.languageId = languageId; }
-    public Byte getOriginalLanguageId() { return originalLanguageId; }
-    public void setOriginalLanguageId(Byte originalLanguageId) { this.originalLanguageId = originalLanguageId; }
     public Integer getRentalDuration() { return rentalDuration; }
     public void setRentalDuration(Integer rentalDuration) { this.rentalDuration = rentalDuration; }
     public BigDecimal getRentalRate() { return rentalRate; }
@@ -86,5 +86,13 @@ public class Film {
 	public void setActors(Set<Actor> actors) {
 		this.actors = actors;
 	}
+	public Language getLanguage() {
+		return language;
+	}
+	public void setLanguage(Language language) {
+		this.language = language;
+	}
+	
+	
     
 }

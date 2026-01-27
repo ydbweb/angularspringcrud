@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/films")
+@RequestMapping("/filmactor/api/films")
 public class FilmController {
     private final FilmService filmService;
 
@@ -19,7 +19,7 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Film>> getAllFilms() {
         return new ResponseEntity<>(filmService.getAllFilms(), HttpStatus.OK);
     }
@@ -44,8 +44,8 @@ public class FilmController {
                     existingFilm.setTitle(filmDetails.getTitle());
                     existingFilm.setDescription(filmDetails.getDescription());
                     existingFilm.setReleaseYear(filmDetails.getReleaseYear());
-                    existingFilm.setLanguageId(filmDetails.getLanguageId());
-                    existingFilm.setOriginalLanguageId(filmDetails.getOriginalLanguageId());
+                   // existingFilm.setLanguageId(filmDetails.getLanguageId());
+                   // existingFilm.setOriginalLanguageId(filmDetails.getOriginalLanguageId());
                     existingFilm.setRentalDuration(filmDetails.getRentalDuration());
                     existingFilm.setRentalRate(filmDetails.getRentalRate());
                     existingFilm.setLength(filmDetails.getLength());
