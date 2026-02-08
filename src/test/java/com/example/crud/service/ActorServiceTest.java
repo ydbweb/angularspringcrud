@@ -3,6 +3,8 @@ package com.example.crud.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -141,6 +143,7 @@ class ActorServiceTest {
 	    System.out.println("Films associated with actor after update: " + result.getFilms().get(1).getFilmId()+"b");
 	    // If your service logic adds the 2 films from the map:
 	    assertEquals(2, result.getFilms().size());
+	    verify(actorRepository, times(1)).removeFilmAssociation(this.actor.getActorId(), 1);
 	}
 	
 	@Test
