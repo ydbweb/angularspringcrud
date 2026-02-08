@@ -41,7 +41,8 @@ public class ActorController {
     @PostMapping
     public ResponseEntity<Actor> createActor(@RequestBody Actor actor) {
         actor.setActorId(null);
-        return null;
+        Actor savedActor = actorService.saveActor(actor);
+        return new ResponseEntity<>(savedActor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

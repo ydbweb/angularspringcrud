@@ -23,11 +23,15 @@ import java.util.Optional;
 public class ActorService {
     private final ActorRepository actorRepository;
     private final FilmRepository filmRepository;
+    @PersistenceContext private EntityManager entityManager;
 
     @Autowired
-    public ActorService(ActorRepository actorRepository, FilmRepository filmRepository) {
+    public ActorService(ActorRepository actorRepository, 
+                        FilmRepository filmRepository, 
+                        EntityManager entityManager) { // Add this
         this.actorRepository = actorRepository;
-		this.filmRepository = filmRepository;
+        this.filmRepository = filmRepository;
+        this.entityManager = entityManager;
     }
 
     public List<Actor> getAllActors() {
@@ -65,7 +69,7 @@ public class ActorService {
 
 	}
     
-    @PersistenceContext private EntityManager entityManager;
+    
     
     @Transactional
     public Actor addUpdateToactorFilms(Integer id, Object actorDetails) {
